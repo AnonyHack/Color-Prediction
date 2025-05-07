@@ -341,6 +341,37 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(f"✅ Broadcast sent to {success} users.")
 
+async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle the /stats command."""
+    if update.effective_user.id != CONFIG['admin_id']:
+        await update.message.reply_text("⚠️ You are not authorized to use this command.")
+        return
+
+    user_count = users_collection.count_documents({})
+    total_predictions = predictions_collection.count_documents({})
+    text = f"📊 *Bᴏᴛ Sᴛᴀᴛɪꜱᴛɪᴄꜱ*\n\n"
+    text += f"👥 Tᴏᴛᴀʟ Uꜱᴇʀꜱ: {user_count}\n"
+    text += f"🔍 Tᴏᴛᴀʟ Predictions: {total_predictions}\n\n"
+
+    await update.message.reply_text(text, parse_mode="Markdown")
+
+async def contact_us(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle the /contactus command."""
+    contact_text = (
+        "📞 ★彡( 𝕮𝖔𝖓𝖙𝖆𝖈𝖙 𝖀𝖘 )彡★ 📞\n\n"
+        "📧 Eᴍᴀɪʟ: `freenethubbusiness@gmail.com`\n\n"
+        "Fᴏʀ Aɴʏ Iꜱꜱᴜᴇꜱ, Bᴜꜱɪɴᴇꜱꜱ Dᴇᴀʟꜱ Oʀ IɴQᴜɪʀɪᴇꜱ, Pʟᴇᴀꜱᴇ Rᴇᴀᴄʜ Oᴜᴛ Tᴏ Uꜱ \n\n"
+        "❗ *ONLY FOR BUSINESS AND HELP, DON'T SPAM!*"
+    )
+    
+    keyboard = [[InlineKeyboardButton("📩 Mᴇꜱꜱᴀɢᴇ Aᴅᴍɪɴ", url="https://t.me/Silando")]]
+    
+    await update.message.reply_text(
+        contact_text,
+        parse_mode="Markdown",
+        reply_markup=InlineKeyboardMarkup(keyboard)
+    )
+
 # === WEBHOOK SETUP ===
 async def health_check(request):
     """Health check endpoint"""
@@ -363,6 +394,8 @@ def main():
     application.add_handler(CommandHandler("profile", profile))
     application.add_handler(CommandHandler("leaderboard", leaderboard))
     application.add_handler(CommandHandler("broadcast", broadcast))
+    application.add_handler(CommandHandler("stats", stats))  # Updated stats command
+    application.add_handler(CommandHandler("contactus", contact_us))  # Updated contactus command
     application.add_handler(CallbackQueryHandler(handle_color_prediction, pattern="^color_prediction$"))
     application.add_handler(CallbackQueryHandler(handle_number_prediction, pattern="^number_prediction$"))
     application.add_handler(CallbackQueryHandler(verify_membership, pattern="^verify_membership$"))
