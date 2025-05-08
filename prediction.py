@@ -302,7 +302,8 @@ async def profile(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"🤵 Name: {user.first_name}\n"
         f"👤 Username: {user.username or 'N/A'}\n"
         f"📊 Predictions: {prediction_count}\n"
-        f"⏳ Joined: {user_data.get('join_date', 'N/A')}"
+        f"⏳ Joined: {user_data.get('join_date', 'N/A')}\n"
+        f"━━━━━━━━━━━━━━━━━━━━━━━━\n"
     )
 
 async def leaderboard(update: Update, context: ContextTypes.DEFAULT_TYPE):
